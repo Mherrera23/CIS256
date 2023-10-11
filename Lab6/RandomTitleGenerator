@@ -1,0 +1,39 @@
+package Lab6;
+import java.util.Random;
+
+public class RandomTitleGenerator {
+	// Define a set of characters to use in generating random titles
+	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+	private static final int TITLE_LENGTH = 10; 
+
+	
+
+	public static void generateManyTitles() {
+		int numberOfTitles = 1000;
+
+		for (int i = 0; i < numberOfTitles; i++) {
+			String randomTitle = RandomTitleGenerator.generateRandomTitle();
+			System.out.println(randomTitle);
+		}
+	}
+
+
+
+
+	public static String generateRandomTitle() {
+		StringBuilder title = new StringBuilder();
+
+		// Create a random object
+		Random random = new Random();
+
+		for (int i = 0; i < TITLE_LENGTH; i++) {
+			// Append a random character from the CHARACTERS set to the title
+			int randomIndex = random.nextInt(CHARACTERS.length());
+			char randomChar = CHARACTERS.charAt(randomIndex);
+			title.append(randomChar);
+		}
+
+		return title.toString();
+	}
+
+}
