@@ -1,0 +1,97 @@
+package Lab6;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class InventoryManager {
+
+	public static void main(String[] args) {
+
+		RandomTitleGenerator rand = new RandomTitleGenerator();
+		BinarySearchTree bst = new BinarySearchTree();
+		Trie trie = new Trie();
+
+		// Generate 10,000 random titles
+		List<String> generatedTitles = new ArrayList<String>();
+		for (int i = 0; i < 10000; i++) {
+			generatedTitles.add(rand.generateRandomTitle());
+		}
+
+
+		// Test BST Insert
+		System.out.println("TESTING BST INSERT:");
+		Instant startTimeBSTInsert = Instant.now();
+		for (String title : generatedTitles) {
+			bst.insert(title);
+		}
+		Instant endTimeBSTInsert = Instant.now();
+		Duration totalTimeBSTInsert = Duration.between(startTimeBSTInsert, endTimeBSTInsert);
+		System.out.println("Execution time for BST Insert: " + totalTimeBSTInsert.toMillis() + "ms");
+
+
+		// Test BST Search
+		System.out.println("\nTESTING BST SEARCH:");
+		Instant startTimeBSTSearch = Instant.now();
+		for (String title : generatedTitles) {
+			bst.search(title);
+		}
+		Instant endTimeBSTSearch = Instant.now();
+		Duration totalTimeBSTSearch = Duration.between(startTimeBSTSearch, endTimeBSTSearch);
+		System.out.println("Execution time for BST Search: " + totalTimeBSTSearch.toMillis() + "ms");
+
+
+		// Test BST delete
+		System.out.println("\nTESTING BST DELETE:");
+		Instant startTimeBSTDelete = Instant.now();
+
+		for (String titleToDelete : generatedTitles) {
+			bst.delete(titleToDelete);
+		}
+		Instant endTimeBSTDelete = Instant.now();
+		Duration totalTimeBSTDelete = Duration.between(startTimeBSTDelete, endTimeBSTDelete);
+		System.out.println("Execution time for BST Delete: " + totalTimeBSTDelete.toMillis() + "ms");
+
+		// Reinsert the titles into BST for further testing
+		for (String title : generatedTitles) {
+			bst.insert(title);
+		}
+
+
+		// Test Trie Insert
+		System.out.println("\n\nTESTING TRIE INSERT:");
+		Instant startTimeTrieInsert = Instant.now();
+		for (String title : generatedTitles) {
+			trie.insert(title);
+		}
+		Instant endTimeTrieInsert = Instant.now();
+		Duration totalTimeTrieInsert = Duration.between(startTimeTrieInsert, endTimeTrieInsert);
+		System.out.println("Execution time for TRIE Insert: " + totalTimeTrieInsert.toMillis() + "ms");
+
+
+		// Test Trie Search
+		System.out.println("\nTESTING TRIE SEARCH:");
+		Instant startTimeTrieSearch = Instant.now();
+		for (String title : generatedTitles) {
+			trie.search(title);
+		}
+		Instant endTimeTrieSearch = Instant.now();
+		Duration totalTimeTrieSearch = Duration.between(startTimeTrieSearch, endTimeTrieSearch);
+		System.out.println("Execution time for TRIE Search: " + totalTimeTrieSearch.toMillis() + "ms");
+
+
+		// Test Trie delete
+		System.out.println("\nTESTING TRIE DELETE:");
+
+		Instant startTimeTrieDelete = Instant.now();
+		for (String titleToDelete : generatedTitles) {
+			trie.delete(titleToDelete);
+		}
+		Instant endTimeTrieDelete = Instant.now();
+		Duration totalTimeTrieDelete = Duration.between(startTimeTrieDelete, endTimeTrieDelete);
+		System.out.println("Execution time for TRIE Delete: " + totalTimeTrieDelete.toMillis() + "ms");
+	}
+
+
+}
