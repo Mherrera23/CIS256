@@ -1,0 +1,124 @@
+package Lab6;
+
+
+class Node {
+	String title;
+	Node left;
+	Node right;
+
+	public Node(String title) {
+		this.title = title;
+		this.left = null;
+		this.right = null;
+	}
+
+
+}
+
+
+
+public class BinarySearchTree {
+
+	private Node root;
+
+	public BinarySearchTree() {
+		this.root = null;
+	}
+
+
+
+	public void insert(String title) {
+		root = insertRec(root, title);
+	}
+
+	private Node insertRec(Node root, String title) {
+		title = title.trim(); // Assign the trimmed value back to 'title'
+		if (root == null) {
+			root = new Node(title);
+			return root;
+		}
+
+		if (title.compareTo(root.title) < 0) {
+			root.left = insertRec(root.left, title);
+		} else if (title.compareTo(root.title) > 0) {
+			root.right = insertRec(root.right, title);
+		}
+
+		return root;
+	}
+
+
+
+
+
+	public void delete(String title) {
+		root = deleteRec(root, title);
+	}
+
+
+	private Node deleteRec(Node root, String title) {
+
+		if (root == null) {
+			return root;
+		}
+
+		if (title.compareToIgnoreCase(root.title) < 0) {
+			root.left = deleteRec(root.left, title);
+		} 
+		else if (title.compareTo(root.title) > 0) {
+			root.right = deleteRec(root.right, title);
+		} 
+		else {
+			if (root.left == null) {
+				return root.right;
+			} 
+			else if (root.right == null) {
+				return root.left;
+			}
+
+			root.title = minValue(root.right);
+			root.right = deleteRec(root.right, root.title);
+		}
+
+		return root;
+	}
+
+
+
+
+	private String minValue(Node root) {
+		String minValue = root.title;
+		while (root.left != null) {
+			minValue = root.left.title;
+			root = root.left;
+		}
+		return minValue;
+	}
+
+
+
+
+	public String search(String title) {
+		String result = searchRec(root, title);
+		return result;
+	}
+
+	private String searchRec(Node root, String title) {
+		if (root == null) {
+			return title.substring(0, 1).toUpperCase() + title.substring(1) + "\' was not found.\n";
+		}
+
+		if (title.equalsIgnoreCase(root.title)) {
+			return root.title.substring(0, 1).toUpperCase() + root.title.substring(1) + "\' was found.\n";
+		}
+
+		if (title.compareTo(root.title) < 0) {
+			return searchRec(root.left, title);
+		}
+
+		return searchRec(root.right, title);
+	}
+
+
+
+}
