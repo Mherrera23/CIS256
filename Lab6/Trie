@@ -1,0 +1,168 @@
+package Lab6;
+
+
+public class Trie {
+
+	// Alphabet size (# of symbols)
+	private static final int ALPHABET_SIZE = 26;
+
+	public static class TrieNode {
+		TrieNode[] children = new TrieNode[ALPHABET_SIZE];
+		boolean isEndOfWord;
+
+		TrieNode() {
+			isEndOfWord = false;
+			for (int i = 0; i < ALPHABET_SIZE; i++) {
+				children[i] = null;
+			}
+		}
+	}
+
+	private static TrieNode root;
+
+
+	// Constructor to initialize the root node
+	public Trie() {
+		root = new TrieNode();
+	}
+
+
+	// If not present, inserts key into trie
+	// If the key is a prefix of trie node,
+	public void insert(String key) {
+
+		int level;
+		int length = key.length();
+		StringBuilder originalKey = new StringBuilder(key);
+
+		key = key.replace(" ", "").toLowerCase(); // Remove spaces and convert to lowercase
+
+		TrieNode pCrawl = root;
+
+		for (level = 0; level < length; level++) {
+			if (level < key.length()) {
+				char currentChar = key.charAt(level);
+
+				int index;
+
+				if (Character.isLowerCase(currentChar)) {
+					index = currentChar - 'a';
+				} else if (Character.isUpperCase(currentChar)) {
+					index = currentChar - 'A';
+				} else {
+					index = 4;
+				}
+
+				if (pCrawl.children[index] == null)
+					pCrawl.children[index] = new TrieNode();
+
+				pCrawl = pCrawl.children[index];
+			}
+		}
+
+		// Mark the last node as a leaf
+		pCrawl.isEndOfWord = true;
+
+	}
+
+
+
+
+
+
+	// Returns true if key is present in the trie, else false
+	public String search(String key) {
+
+		String originalKey = key;
+		key = key.replace(" ", "").toLowerCase(); // Remove spaces and convert to lowercase
+		int level;
+		int length = key.length();
+		TrieNode pCrawl = root;
+
+		for (level = 0; level < length; level++) {
+			int index = key.charAt(level) - 'a';
+
+			if (pCrawl.children[index] == null) {
+				// Item was not found, return a message with capitalized and spaced originalKey
+				return "'" + originalKey.substring(0, 1).toUpperCase() + originalKey.substring(1) + "' was not found\n";
+			}
+
+			pCrawl = pCrawl.children[index];
+		}
+
+		// Item was found, return a message with capitalized and spaced originalKey
+		originalKey = originalKey.substring(0, 1).toUpperCase() + originalKey.substring(1);
+		StringBuilder formattedKey = new StringBuilder(originalKey);
+		for (int i = 1; i < formattedKey.length(); i++) {
+			if (formattedKey.charAt(i - 1) == ' ') {
+				formattedKey.setCharAt(i, Character.toUpperCase(formattedKey.charAt(i)));
+			}
+		}
+
+		return "'" + formattedKey.toString() + "' was found\n";
+	}
+
+
+
+
+
+
+
+	public boolean delete(String key) {
+		return deleteRec(root, key.replace(" ", "").toLowerCase(), 0, key);
+	}
+
+	private boolean deleteRec(TrieNode node, String key, int depth, String originalKey) {
+		if (node == null) {
+			return false; // Key not found
+		}
+
+		// If we have processed all characters of the key
+		if (depth == key.length()) {
+			if (node.isEndOfWord) {
+				node.isEndOfWord = false; // Mark as not a word
+				return true; // Key found and deleted
+			}
+			return false; // Key not found
+		}
+
+		char currentChar = key.charAt(depth);
+		int index;
+
+		if (Character.isLowerCase(currentChar)) {
+			index = currentChar - 'a';
+		} else if (Character.isUpperCase(currentChar)) {
+			index = currentChar - 'A';
+		} else {
+			index = 4;
+		}
+
+		// Recursively delete in the subtree
+		boolean isDeleted = deleteRec(node.children[index], key, depth + 1, originalKey);
+
+		// If the child node is empty, remove it
+		if (isDeleted && !node.isEndOfWord && isEmptyNode(node.children[index])) {
+			node.children[index] = null;
+		}
+
+		return isDeleted;
+	}
+
+
+
+
+
+	// Helper function to check if a TrieNode is empty
+	private boolean isEmptyNode(TrieNode node) {
+		for (int i = 0; i < ALPHABET_SIZE; i++) {
+			if (node.children[i] != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+
+
+}
