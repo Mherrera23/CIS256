@@ -1,0 +1,45 @@
+package Lab7;
+
+/**
+ * This class tests Insert, Delete and Search for an AVL Tree.
+ * @author Manuel Herrera
+ * @author Aljhay Jhaslie Soriano
+ */
+public class Main {
+
+    public static void main(String[] args) {
+
+        AvlTree tree = new AvlTree();
+
+        System.out.println("TESTING ADD():");
+        int[] insertKeys = {10, 5, 3, 7, 12, 15, 11, 20, 18, 25};
+        
+        for (int key : insertKeys) {
+            tree.insertNode(key);
+            System.out.println(key + " was inserted.");
+        }
+        System.out.println("Insert operations completed.\n");
+
+        System.out.println("TESTING REMOVE():");
+        int[] deleteKeys = {7, 12, 5, 25, 11};
+        for (int key : deleteKeys) {
+            tree.deleteNode(key);
+            System.out.println(key + " was removed.");
+        }
+        System.out.println("Delete operations completed.\n");
+
+        System.out.println("TESTING SEARCH():");
+        int[] searchKeys = {10};
+        for (int key : searchKeys) {
+            Node result = tree.searchNode(key);
+            if (result != null) {
+                System.out.println("Element found: " + result.getData());
+            } else {
+                System.out.println("Element not found.");
+            }
+        }
+
+        System.out.println("\nAVL Tree:");
+        tree.printTree("", tree.getRoot(), true);
+    }
+}
