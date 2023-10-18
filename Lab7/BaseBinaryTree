@@ -1,0 +1,20 @@
+package Lab7;
+
+/**
+ * A base implementation of a binary tree.
+ */
+public class BaseBinaryTree implements BinaryTree {
+
+    protected Node root;
+
+    
+    /**
+     * Retrieves the root node of the binary tree.
+     * @return The root node
+     */
+    @Override
+    public Node getRoot() {
+        return root;
+    }
+    
+}
