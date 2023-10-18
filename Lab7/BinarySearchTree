@@ -1,0 +1,13 @@
+package Lab7;
+
+/**
+ * An interface for a binary search tree that extends the BinaryTree interface.
+ */
+public interface BinarySearchTree extends BinaryTree {
+
+    Node searchNode(int key);
+
+    void insertNode(int key);
+
+    void deleteNode(int key);
+}
