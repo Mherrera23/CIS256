@@ -1,0 +1,10 @@
+package Lab7;
+
+/**
+ * A basic binary tree interface.
+ */
+public interface BinaryTree {
+
+    Node getRoot();
+
+}
