@@ -1,0 +1,178 @@
+package Lab7;
+import static java.lang.Math.max;
+
+/**
+ * A recursive binary search tree implementation with <code>int</code> keys.
+ *
+ */
+public class AvlTree extends BinarySearchTreeRecursive {
+
+	
+    /**
+     * Inserts a node with a given key and balances the tree.
+     * @param key  Key of the node.
+     * @param node Node in which the insertion is made
+     * @return the balanced node
+     */
+    @Override
+    Node insertNode(int key, Node node) {
+        node = super.insertNode(key, node);
+        if (node != null) {
+            updateHeight(node);
+            return rebalance(node);
+        }
+        return null;
+    }
+
+    
+    
+    
+    /**
+     * Deletes a node with a given key and balances the tree.
+     * @param key  Key of the node.
+     * @param node Node in which the deletion is made
+     * @return the balanced node
+     */
+    @Override
+    Node deleteNode(int key, Node node) {
+        node = super.deleteNode(key, node);
+        if (node != null) {
+            updateHeight(node);
+            return rebalance(node);
+        }
+        return null;
+    }
+
+    
+    
+    
+    /**
+     * Updates the height of a given node.
+     * @param node Node whose height needs to be updated.
+     */
+    private void updateHeight(Node node) {
+        int leftChildHeight = height(node.left);
+        int rightChildHeight = height(node.right);
+        node.height = max(leftChildHeight, rightChildHeight) + 1;
+    }
+
+    
+    
+    
+    /**
+     * Rebalances the tree with a given node.
+     * @param node Node to rebalance the tree.
+     * @return The balanced node
+     */
+    private Node rebalance(Node node) {
+        int balanceFactor = balanceFactor(node);
+
+        // Left-heavy?
+        if (balanceFactor < -1) {
+            if (balanceFactor(node.left) <= 0) {
+                // Rotate right
+                node = rotateRight(node);
+            } else {
+                // Rotate left-right
+                node.left = rotateLeft(node.left);
+                node = rotateRight(node);
+            }
+        }
+
+        // Right-heavy?
+        if (balanceFactor > 1) {
+            if (balanceFactor(node.right) >= 0) {
+                // Rotate left
+                node = rotateLeft(node);
+            } else {
+                // Rotate right-left
+                node.right = rotateRight(node.right);
+                node = rotateLeft(node);
+            }
+        }
+
+        return node;
+    }
+
+    
+    
+    
+    /**
+     * Performs a right rotation on a given node.
+     * @param node Node on which the rotation is performed.
+     * @return The rotated node
+     */
+    private Node rotateRight(Node node) {
+        Node leftChild = node.left;
+
+        node.left = leftChild.right;
+        leftChild.right = node;
+
+        updateHeight(node);
+        updateHeight(leftChild);
+
+        return leftChild;
+    }
+
+    
+    
+    
+    /**
+     * Performs a left rotation on a given node.
+     * @param node Node on which the rotation is performed
+     * @return The rotated node
+     */
+    private Node rotateLeft(Node node) {
+        Node rightChild = node.right;
+
+        node.right = rightChild.left;
+        rightChild.left = node;
+
+        updateHeight(node);
+        updateHeight(rightChild);
+
+        return rightChild;
+    }
+
+    
+    
+    
+    /**
+     * Calculates the balance factor of a given node.
+     * @param node Node whose balance factor is calculated.
+     * @return The balance factor of the node
+     */
+    private int balanceFactor(Node node) {
+        return height(node.right) - height(node.left);
+    }
+
+    
+    
+    
+    /**
+     * Retrieves the height of a given node.
+     * @param node Node whose height is retrieved.
+     * @return The height of the node
+     */
+    private int height(Node node) {
+        return node != null ? node.height : -1;
+    }
+
+    
+    
+    
+    /**
+     * Prints the AVL tree.
+     * @param prefix The prefix for printing.
+     * @param n      The node to be printed.
+     * @param isLeft Determines if the node is a left child.
+     */
+    public void printTree(String prefix, Node n, boolean isLeft) {
+        if (n != null) {
+            printTree(prefix + "     ", n.right, false);
+            System.out.println(prefix + ("|-- ") + n.data);
+            printTree(prefix + "     ", n.left, true);
+        }
+    }
+    
+}
