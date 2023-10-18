@@ -1,0 +1,142 @@
+package Lab7;
+
+/**
+ * An implementation of a binary search tree with recursive operations.
+ */
+public class BinarySearchTreeRecursive extends BaseBinaryTree implements BinarySearchTree {
+
+
+	/**
+	 * Searches for a node with the specified key recursively.
+	 *
+	 * @param key  Key to search for
+	 * @param node Current node being searched
+	 * @return The node with the specified key, or null if not found
+	 */
+	@Override
+	public Node searchNode(int key) {
+		return searchNode(key, root);
+	}
+
+	private Node searchNode(int key, Node node) {
+		if (node == null) {
+			return null;
+		}
+
+		if (key == node.data) {
+			return node;
+		} else if (key < node.data) {
+			return searchNode(key, node.left);
+		} else {
+			return searchNode(key, node.right);
+		}
+	}
+
+
+
+
+	/**
+	 * Inserts a node with the specified key into the binary search tree recursively.
+	 *
+	 * @param key  Key to insert
+	 * @param node Current node being examined
+	 * @return The updated node structure
+	 */
+	@Override
+	public void insertNode(int key) {
+		root = insertNode(key, root);
+	}
+
+	Node insertNode(int key, Node node) {
+		// No node at current position --> store new node at current position
+		if (node == null) {
+			node = new Node(key);
+		}
+
+
+		else if (key < node.data) {
+			node.left = insertNode(key, node.left);
+		} else if (key > node.data) {
+			node.right = insertNode(key, node.right);
+		} else {
+			throw new IllegalArgumentException("BST already contains a node with key " + key);
+		}
+
+		return node;
+	}
+
+
+
+
+	/**
+	 * Deletes the node with the specified key from the binary search tree recursively.
+	 * @param key  Key to delete
+	 * @param node Current node being examined
+	 * @return The updated node structure
+	 */
+	@Override
+	public void deleteNode(int key) {
+		root = deleteNode(key, root);
+	}
+
+	Node deleteNode(int key, Node node) {
+		if (node == null) {
+			return null;
+		}
+
+		if (key < node.data) {
+			node.left = deleteNode(key, node.left);
+		} else if (key > node.data) {
+			node.right = deleteNode(key, node.right);
+		}
+
+		// Node has no children --> just delete it
+		else if (node.left == null && node.right == null) {
+			node = null;
+		}
+
+		else if (node.left == null) {
+			node = node.right;
+		} else if (node.right == null) {
+			node = node.left;
+		}
+
+		// Node has two children
+		else {
+			deleteNodeWithTwoChildren(node);
+		}
+
+		return node;
+	}
+
+
+
+
+	/**
+	 * Deletes a node with two children.
+	 * @param node Node to be deleted
+	 */
+	private void deleteNodeWithTwoChildren(Node node) {
+		// Find minimum node of right subtree
+		Node inOrderSuccessor = findMinimum(node.right);
+
+		node.data = inOrderSuccessor.data;
+
+		node.right = deleteNode(inOrderSuccessor.data, node.right);
+	}
+
+
+
+
+	/**
+	 * Finds the node with the minimum value in the subtree rooted at the specified node.
+	 * @param node Root node of the subtree
+	 * @return The node with the minimum value
+	 */
+	private Node findMinimum(Node node) {
+		while (node.left != null) {
+			node = node.left;
+		}
+		return node;
+	}
+}
