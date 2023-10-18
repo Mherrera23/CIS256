@@ -1,0 +1,48 @@
+package Lab7;
+
+/**
+ * A node class representing an element in the binary tree.
+ */
+public class Node {
+
+	int data;
+	Node left;
+	Node right;
+	Node parent; 
+	int height; 
+	boolean color; 
+
+
+
+	/**
+	 * Constructor for creating a node with a specified value.
+	 * @param data Value to be stored in the node
+	 */
+	public Node(int data) {
+		this.data = data;
+	}
+
+
+
+
+	/**
+	 * Retrieves the data stored in the node.
+	 * @return the data stored in the node
+	 */
+	public int getData() {
+		return data;
+	}
+
+
+
+
+	/**
+	 * Returns a string representation of the node's data.
+	 * @return the string representation of the node's data
+	 */
+	@Override
+	public String toString() {
+		return String.valueOf(data);
+	}
+
+}
