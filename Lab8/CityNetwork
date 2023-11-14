@@ -1,0 +1,32 @@
+package Lab8;
+import java.util.*;
+
+
+public class CityNetwork {
+	
+    public static void main(String[] args) {
+    	
+        Graph cityGraph = new Graph();
+
+        // Create a sample city network
+        cityGraph.createSampleCityNetwork();
+
+        
+        // Demonstrate BFS and DFS traversals
+        String startLandmark = "A"; // Specify the starting landmark
+        System.out.println("BFS TRAVERSAL:");
+        cityGraph.BFS(startLandmark);
+
+        
+        System.out.println("\nDFS TRAVERSAL:");
+        cityGraph.DFS(startLandmark);
+
+        
+        // Demonstrate shortest path finding
+        String endLandmark = "G"; // Specify the destination landmark
+        List<String> shortestPath = cityGraph.findShortestPath(startLandmark, endLandmark);
+        System.out.println("\nShortest Path from " + startLandmark + " to " + endLandmark + ": " + shortestPath);
+    }
+    
+    
+}
