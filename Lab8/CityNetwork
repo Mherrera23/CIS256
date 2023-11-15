@@ -2,31 +2,31 @@ package Lab8;
 import java.util.*;
 
 
+/**
+ * This class models a city's transportation network by using a directed graph.
+ * It tests BFS and DFS traversals, and tests the shortest path finding algorithm.
+ * @author Manuel Herrera
+ */
 public class CityNetwork {
 	
     public static void main(String[] args) {
     	
         Graph cityGraph = new Graph();
-
-        // Create a sample city network
         cityGraph.createSampleCityNetwork();
 
-        
-        // Demonstrate BFS and DFS traversals
+        // Tests BFS and DFS traversals
         String startLandmark = "A"; // Specify the starting landmark
         System.out.println("BFS TRAVERSAL:");
         cityGraph.BFS(startLandmark);
-
         
         System.out.println("\nDFS TRAVERSAL:");
         cityGraph.DFS(startLandmark);
 
         
-        // Demonstrate shortest path finding
+        // Tests shortest path finding
         String endLandmark = "G"; // Specify the destination landmark
         List<String> shortestPath = cityGraph.findShortestPath(startLandmark, endLandmark);
         System.out.println("\nShortest Path from " + startLandmark + " to " + endLandmark + ": " + shortestPath);
     }
-    
     
 }
