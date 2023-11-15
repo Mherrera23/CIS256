@@ -1,209 +1,229 @@
 package Lab8;
 import java.util.*;
 
-
+/**
+ * The Graph class represents a directed graph that models a city's transportation network.
+ * It includes methods for adding vertices and edges, performing BFS and DFS traversals,
+ * and finding the shortest path between two landmarks.
+ */
 public class Graph {
+
 	private Map<String, List<String>> adjacencyList;
 
-	
+
 	public Graph() {
 		this.adjacencyList = new HashMap<>();
 	}
 
-	
-	// Method to add a vertex to the graph
+
+	/**
+	 * Adds a vertex to the graph with the specified identifier.
+	 * @param vertex The identifier of the vertex to be added.
+	 */
 	public void addVertex(String vertex) {
 		adjacencyList.put(vertex, new ArrayList<>());
 	}
 
-	
-	// Method to add an edge between two vertices
+
+
+
+	/**
+	 * Adds a directed edge between two vertices in the graph.
+	 * @param source      The source vertex.
+	 * @param destination The destination vertex.
+	 */
 	public void addEdge(String source, String destination) {
 		adjacencyList.get(source).add(destination);
 	}
 
-	
-	
-	// Method to perform BFS traversal and return the order of visited landmarks
+
+
+
+	/**
+	 * Performs a Breadth-First Search (BFS) traversal starting from the specified landmark.
+	 * @param startLandmark The starting landmark for the traversal.
+	 * @return A list of the order of visited landmarks during the traversal.
+	 */
 	public List<String> BFS(String startLandmark) {
-	    List<String> visitedOrder = new ArrayList<>();
-	    Queue<String> queue = new LinkedList<>();
-	    Set<String> visited = new HashSet<>();
+		List<String> visitedOrder = new ArrayList<>();
+		Queue<String> queue = new LinkedList<>();
+		Set<String> visited = new HashSet<>();
 
-	    if (!adjacencyList.containsKey(startLandmark)) {
-	        System.out.println("Start landmark does not exist in the graph.");
-	        return visitedOrder;
-	    }
+		if (!adjacencyList.containsKey(startLandmark)) {
+			System.out.println("Start landmark does not exist in the graph.");
+			return visitedOrder;
+		}
 
-	    queue.offer(startLandmark);
-	    visited.add(startLandmark);
+		queue.offer(startLandmark);
+		visited.add(startLandmark);
 
-	    while (!queue.isEmpty()) {
-	        String currentLandmark = queue.poll();
-	        visitedOrder.add(currentLandmark);
+		while (!queue.isEmpty()) {
+			String currentLandmark = queue.poll();
+			visitedOrder.add(currentLandmark);
 
-	        List<String> neighbors = adjacencyList.get(currentLandmark);
-	        if (neighbors != null) {
-	            for (String neighbor : neighbors) {
-	                if (!visited.contains(neighbor)) {
-	                    queue.offer(neighbor);
-	                    visited.add(neighbor);
-	                }
-	            }
-	        }
-	    }
+			List<String> neighbors = adjacencyList.get(currentLandmark);
+			if (neighbors != null) {
+				for (String neighbor : neighbors) {
+					if (!visited.contains(neighbor)) {
+						queue.offer(neighbor);
+						visited.add(neighbor);
+					}
+				}
+			}
+		}
 
-	    return visitedOrder;
+		return visitedOrder;
 	}
 
 
-	
-	
-	// Method to perform DFS traversal using a stack and return the order of visited landmarks
+
+
+	/**
+	 * Performs a Depth-First Search (DFS) traversal starting from the specified landmark.
+	 * @param startLandmark The starting landmark for the traversal.
+	 * @return A list of the order of visited landmarks during the traversal.
+	 */
 	public List<String> DFS(String startLandmark) {
-	    List<String> visitedOrder = new ArrayList<>();
-	    Stack<String> stack = new Stack<>();
-	    Set<String> visited = new HashSet<>();
+		List<String> visitedOrder = new ArrayList<>();
+		Stack<String> stack = new Stack<>();
+		Set<String> visited = new HashSet<>();
 
-	    if (!adjacencyList.containsKey(startLandmark)) {
-	        System.out.println("Start landmark does not exist in the graph.");
-	        return visitedOrder;
-	    }
+		if (!adjacencyList.containsKey(startLandmark)) {
+			System.out.println("Start landmark does not exist in the graph.");
+			return visitedOrder;
+		}
 
-	    stack.push(startLandmark);
+		stack.push(startLandmark);
 
-	    while (!stack.isEmpty()) {
-	        String currentLandmark = stack.pop();
+		while (!stack.isEmpty()) {
+			String currentLandmark = stack.pop();
 
-	        if (!visited.contains(currentLandmark)) {
-	            visitedOrder.add(currentLandmark);
-	            visited.add(currentLandmark);
+			if (!visited.contains(currentLandmark)) {
+				visitedOrder.add(currentLandmark);
+				visited.add(currentLandmark);
 
-	            List<String> neighbors = adjacencyList.get(currentLandmark);
-	            if (neighbors != null) {
-	                for (String neighbor : neighbors) {
-	                    if (!visited.contains(neighbor)) {
-	                        stack.push(neighbor);
-	                    }
-	                }
-	            }
-	        }
-	    }
+				List<String> neighbors = adjacencyList.get(currentLandmark);
+				if (neighbors != null) {
+					for (String neighbor : neighbors) {
+						if (!visited.contains(neighbor)) {
+							stack.push(neighbor);
+						}
+					}
+				}
+			}
+		}
 
-	    return visitedOrder;
+		return visitedOrder;
 	}
 
 
-	
-	
-	// Method to find the shortest path between two landmarks using BFS
+
+
+	/**
+	 * Finds the shortest path between two landmarks using Breadth-First Search (BFS).
+	 * @param startLandmark The starting landmark of the path.
+	 * @param endLandmark   The ending landmark of the path.
+	 * @return A list of the shortest path from startLandmark to endLandmark.
+	 */
 	public List<String> findShortestPath(String startLandmark, String endLandmark) {
-	    List<String> shortestPath = new ArrayList<>();
+		List<String> shortestPath = new ArrayList<>();
 
-	    if (!adjacencyList.containsKey(startLandmark) || !adjacencyList.containsKey(endLandmark)) {
-	        System.out.println("Start or end landmark does not exist in the graph.");
-	        return shortestPath;
-	    }
+		if (!adjacencyList.containsKey(startLandmark) || !adjacencyList.containsKey(endLandmark)) {
+			System.out.println("Start or end landmark does not exist in the graph.");
+			return shortestPath;
+		}
 
-	    Queue<String> queue = new LinkedList<>();
-	    Map<String, String> parentMap = new HashMap<>();
-	    Set<String> visited = new HashSet<>();
+		Queue<String> queue = new LinkedList<>();
+		Map<String, String> parentMap = new HashMap<>();
+		Set<String> visited = new HashSet<>();
 
-	    queue.offer(startLandmark);
-	    visited.add(startLandmark);
+		queue.offer(startLandmark);
+		visited.add(startLandmark);
 
-	    while (!queue.isEmpty()) {
-	        String currentLandmark = queue.poll();
+		while (!queue.isEmpty()) {
+			String currentLandmark = queue.poll();
 
-	        for (String neighbor : adjacencyList.get(currentLandmark)) {
-	            if (!visited.contains(neighbor)) {
-	                queue.offer(neighbor);
-	                visited.add(neighbor);
-	                parentMap.put(neighbor, currentLandmark);
-	            }
-	        }
-	    }
+			for (String neighbor : adjacencyList.get(currentLandmark)) {
+				if (!visited.contains(neighbor)) {
+					queue.offer(neighbor);
+					visited.add(neighbor);
+					parentMap.put(neighbor, currentLandmark);
+				}
+			}
+		}
 
-	    // Reconstruct the shortest path from endLandmark to startLandmark using parentMap
-	    String currentLandmark = endLandmark;
-	    while (currentLandmark != null) {
-	        shortestPath.add(currentLandmark);
-	        currentLandmark = parentMap.get(currentLandmark);
-	    }
+		String currentLandmark = endLandmark;
+		while (currentLandmark != null) {
+			shortestPath.add(currentLandmark);
+			currentLandmark = parentMap.get(currentLandmark);
+		}
 
-	    Collections.reverse(shortestPath);
-	    return shortestPath;
+		Collections.reverse(shortestPath);
+		return shortestPath;
 	}
 
 
 
 
-	// Method to instantiate a sample city network with at least 10 landmarks and 15 roads
+	/**
+	 * Creates a sample city network with predefined landmarks and roads.
+	 * Prints the landmarks, roads, and performs BFS, DFS traversals, and shortest path finding.
+	 */
 	public void createSampleCityNetwork() {
-	    // Add landmarks
-	    addVertex("Mall");
-	    addVertex("Apartments");
-	    addVertex("Theater");
-	    addVertex("Dog Park");
-	    addVertex("Waterfront Area");
-	    addVertex("University");
-	    addVertex("Central Park");
-	    addVertex("Art Museum");
-	    addVertex("Downtown");
-	    addVertex("Sports Stadium");
+		
+		// Add landmarks
+		addVertex("Mall");
+		addVertex("Apartments");
+		addVertex("Theater");
+		addVertex("Dog Park");
+		addVertex("Waterfront Area");
+		addVertex("University");
+		addVertex("Central Park");
+		addVertex("Art Museum");
+		addVertex("Downtown");
+		addVertex("Sports Stadium");
 
-	    // Add roads (edges)
-	    addEdge("Mall", "Dog Park");
-	    addEdge("Apartments", "Central Park");
-	    addEdge("Apartments", "Art Museum");
-	    addEdge("Central Park", "Downtown");
-	    addEdge("Central Park", "Mall");
-	    addEdge("Art Museum", "Theater");
-	    addEdge("Art Museum", "University");
-	    addEdge("Downtown", "Sports Stadium");
-	    addEdge("Theater", "Waterfront Area");
-	    addEdge("University", "Waterfront Area");
-	    addEdge("Apartments", "University");
-	    addEdge("Apartments", "Sports Stadium");
-	    addEdge("Dog Park", "Waterfront Area");
-	    addEdge("Sports Stadium", "Theater");
-	    addEdge("Downtown", "Dog Park");
+		// Add roads (edges)
+		addEdge("Mall", "Dog Park");
+		addEdge("Apartments", "Central Park");
+		addEdge("Apartments", "Art Museum");
+		addEdge("Central Park", "Downtown");
+		addEdge("Central Park", "Mall");
+		addEdge("Art Museum", "Theater");
+		addEdge("Art Museum", "University");
+		addEdge("Downtown", "Sports Stadium");
+		addEdge("Theater", "Waterfront Area");
+		addEdge("University", "Waterfront Area");
+		addEdge("Apartments", "University");
+		addEdge("Apartments", "Sports Stadium");
+		addEdge("Dog Park", "Waterfront Area");
+		addEdge("Sports Stadium", "Theater");
+		addEdge("Downtown", "Dog Park");
 
-	    System.out.println("Sample City Network Created:");
+		System.out.println("Sample City Network Created:");
+		System.out.println("Landmarks: " + adjacencyList.keySet());
 
-	    // Print the landmarks
-	    System.out.println("Landmarks: " + adjacencyList.keySet());
+		System.out.println("Roads:");
+		for (String landmark : adjacencyList.keySet()) {
+			System.out.println("\'"  + landmark + "\' is connected to: " + adjacencyList.get(landmark));
+		}
 
-	    // Print the roads
-	    System.out.println("Roads:");
-	    for (String landmark : adjacencyList.keySet()) {
-	        System.out.println("\'"  + landmark + "\' is connected to: " + adjacencyList.get(landmark));
-	    }
+		System.out.println("\nTesting Traversals and Shortest Path:");
+		String startLandmark = "Apartments";
 
-	    System.out.println("\nTesting Traversals and Shortest Path:");
+		System.out.println("\nBFS Traversal starting from " + startLandmark + ":");
+		List<String> bfsOrder = BFS(startLandmark);
+		System.out.println("Order of visited landmarks: " + bfsOrder);
 
-	    // Choose a starting landmark for traversals
-	    String startLandmark = "Apartments";
+		System.out.println("\nDFS Traversal starting from " + startLandmark + ":");
+		List<String> dfsOrder = DFS(startLandmark);
+		System.out.println("Order of visited landmarks: " + dfsOrder);
 
-	    // Perform BFS traversal
-	    System.out.println("\nBFS Traversal starting from " + startLandmark + ":");
-	    List<String> bfsOrder = BFS(startLandmark);
-	    System.out.println("Order of visited landmarks: " + bfsOrder);
-
-	    // Perform DFS traversal
-	    System.out.println("\nDFS Traversal starting from " + startLandmark + ":");
-	    List<String> dfsOrder = DFS(startLandmark);
-	    System.out.println("Order of visited landmarks: " + dfsOrder);
-
-	    // Choose start and end landmarks for the shortest path
-	    String startPath = "Apartments";
-	    String endPath = "Sports Stadium";
-
-	    // Find the shortest path
-	    List<String> shortestPath = findShortestPath(startPath, endPath);
-
-	    // Print the result
-	    System.out.println("\nShortest Path from " + startPath + " to " + endPath + ": " + shortestPath);
+		String startPath = "Apartments";
+		String endPath = "Sports Stadium";
+		List<String> shortestPath = findShortestPath(startPath, endPath);
+		System.out.println("\nShortest Path from " + startPath + " to " + endPath + ": " + shortestPath);
+		
 	}
 
 }
